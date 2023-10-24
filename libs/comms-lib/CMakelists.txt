@@ -8,20 +8,6 @@ set(COMMS_LIB_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 file(GLOB COMMS_LIB_HEADERS ${COMMS_LIB_INCLUDE_DIR}/*.hpp)
 file(GLOB COMMS_LIB_SOURCE ${COMMS_LIB_SOURCE_DIR}/*.cpp)
 
-# Загрузка библиотеки ZeroMQ из репозитория
-include(FetchContent)
-FetchContent_Declare(
-  zeromq
-  GIT_REPOSITORY https://github.com/zeromq/libzmq.git
-  GIT_TAG        v4.3.5
-)
-FetchContent_Declare(
-  cppzmq
-  GIT_REPOSITORY https://github.com/zeromq/cppzmq.git
-  GIT_TAG        v4.10.0
-)
-FetchContent_MakeAvailable(zeromq cppzmq)
-
 # Создание цели для сборки
 add_library(${PROJECT_NAME} ${COMMS_LIB_HEADERS} ${COMMS_LIB_SOURCE})
 
