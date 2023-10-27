@@ -1,7 +1,7 @@
 # ImageHandlerNetworkSystem
 UNN study project with ZMQ and Protobuf
 
-# APPS:
+# APPs:
 1) **WebCamServer** (wcs-app)
 * Занимается получением изображений с камеры и отправкой их на **ImageHandler**.
 2) **ImageHandler** (ih-app)
