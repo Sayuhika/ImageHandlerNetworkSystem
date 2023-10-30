@@ -34,7 +34,7 @@ ZMQ:
 * ```$ ./autogen.sh```
 * ```$ ./configure```
 * ```$ make```
-* ``` sudo make install```
+* ```$ sudo make install```
 
 Protobuf:
 * ```$ wget https://github.com/protocolbuffers/protobuf/releases/download/v24.4/protobuf-24.4.tar.gz```
