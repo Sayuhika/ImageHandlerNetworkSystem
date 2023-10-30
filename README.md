@@ -16,30 +16,30 @@ UNN study project with ZMQ and Protobuf
 ### **Вариант 1 - Из пакетов**
 
 CMake:
-* $ sudo apt install cmake
+* ```$ sudo apt install cmake```
 
 ZMQ:
-* $ apt install libzmq3-dev
+* ```$ apt install libzmq3-dev```
 
 Protobuf:
-* $ sudo apt-get install libprotobuf-dev protobuf-compiler
-* $ protoc --version
+* ```$ sudo apt-get install libprotobuf-dev protobuf-compiler```
+* ```$ protoc --version```
 
 ### **Вариант 2 - Из исходников**
 
 ZMQ:
-* $ wget https://github.com/zeromq/libzmq/releases/download/v4.3.5/zeromq-4.3.5.tar.gz
-* $ tar -xvf zeromq-4.3.5.tar.gz
-* $ cd zeromq-4.3.5
-* $ ./autogen.sh
-* $ ./configure
-* $ make
-* $ sudo make install
+* ```$ wget https://github.com/zeromq/libzmq/releases/download/v4.3.5/zeromq-4.3.5.tar.gz```
+* ```$ tar -xvf zeromq-4.3.5.tar.gz```
+* ```$ cd zeromq-4.3.5```
+* ```$ ./autogen.sh```
+* ```$ ./configure```
+* ```$ make```
+* ``` sudo make install```
 
 Protobuf:
-* $ wget https://github.com/protocolbuffers/protobuf/releases/download/v24.4/protobuf-24.4.tar.gz
-* $ tar -xvf protobuf-24.4.tar.gz
-* $ cd protobuf-24.4
-* $ ./configure
-* $ make
-* $ sudo make install
+* ```$ wget https://github.com/protocolbuffers/protobuf/releases/download/v24.4/protobuf-24.4.tar.gz```
+* ```$ tar -xvf protobuf-24.4.tar.gz```
+* ```$ cd protobuf-24.4```
+* ```$ ./configure```
+* ```$ make```
+* ```$ sudo make install```
