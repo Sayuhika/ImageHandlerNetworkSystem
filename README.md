@@ -13,3 +13,4 @@ UNN study project with ZMQ and Protobuf
 Открыть терминал в корне проекта и выполнить следующие команды:
 * **git submodule sync**
 * **git submodule update --init --recursive**
+* Убедиться, что ничего не работает и пойти делать на линуксе
