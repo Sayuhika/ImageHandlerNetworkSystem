@@ -2,31 +2,24 @@ cmake_minimum_required(VERSION 3.5)
 
 project(proto-lib LANGUAGES C CXX)
 
-set_property(GLOBAL PROPERTY CXX_STANDARD 14)
-
-# Добавление папки с протофайлами
-set(PROTO_DIR ${CMAKE_CURRENT_SOURCE_DIR}/proto)
-file(GLOB PROTO_FILES ${PROTO_DIR}/*.proto)
-
-set(PROTOC ${CMAKE_CURRENT_SOURCE_DIR}/../protoc/protoc.exe)
+# Внешние зависимости
+set(MIN_PROTOBUF_VERSION 3.19.4)
+find_package(Protobuf REQUIRED)
 
 # Генерация кода из протофайлов
-set(GENERATED_CODE_DIR ${CMAKE_CURRENT_BINARY_DIR}/generated)
-set(PROTO_SRCS ${GENERATED_CODE_DIR}/message.pb.cc)
-set(PROTO_HDRS ${GENERATED_CODE_DIR}/message.pb.h)
-
-add_custom_command(
-    OUTPUT ${PROTO_SRCS} ${PROTO_HDRS}
-    COMMAND ${PROTOC} --proto_path ${PROTO_DIR} ${PROTO_FILES} --cpp_out ${CMAKE_CURRENT_BINARY_DIR}/generated
-    DEPENDS ${PROTOC} ${PROTO_FILES}
-    )
-
-#protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_FILES})
+set(PROTO_DIR ${CMAKE_CURRENT_SOURCE_DIR}/proto)
+file(GLOB PROTO_FILES ${PROTO_DIR}/*.proto)
+PROTOBUF_GENERATE_CPP(PROTO_LIB_SOURCES PROTO_LIB_HEADERS ${PROTO_FILES})
+set_source_files_properties(
+    ${PROTO_LIB_SOURCES} ${PROTO_LIB_HEADERS}
+    PROPERTIES GENERATED TRUE)
 
 # Создание цели для сборки
-add_library(${PROJECT_NAME} ${PROTO_SRCS} ${PROTO_HDRS})
+add_library(${PROJECT_NAME} ${PROTO_LIB_SOURCES})
+set_target_properties(${PROJECT_NAME} PROPERTIES CMAKE_CXX_STANDARD 14)
+target_compile_options(${PROJECT_NAME} PRIVATE "-Wall")
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${protobuf_SOURCE_DIR}/src)
-
-# Линковка с библиотекой protobuf
-target_link_libraries(${PROJECT_NAME} protobuf)
+# Экспорт интерфейсов
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROTOBUF_INCLUDE_DIR})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${Protobuf_LIBRARIES})

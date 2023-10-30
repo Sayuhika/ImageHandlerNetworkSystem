@@ -1,15 +1,17 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.12)
 
+set_property(GLOBAL PROPERTY CXX_STANDARD 17)
+
+message ("Hello")
 project(ihns LANGUAGES C CXX)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
+if (MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
+endif (MSVC)
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs/proto-lib)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs/comms-lib)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs/libzmq)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs/cppzmq)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs/protobuf)
+add_subdirectory(libs/proto-lib)
+add_subdirectory(libs/comms-lib)
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/apps/ics-app)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/apps/ih-app)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/apps/wcs-app)
+# add_subdirectory(apps/ics-app)
+# add_subdirectory(apps/ih-app)
+# add_subdirectory(apps/wcs-app)
