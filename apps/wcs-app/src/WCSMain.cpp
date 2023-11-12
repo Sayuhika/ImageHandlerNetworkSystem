@@ -1,6 +1,8 @@
 #include <zmq.hpp>
 #include <vector>
 #include <string>
+#include <Message.h>
+#include <ZmqHandlers>
 
 int main() 
 {
@@ -10,10 +12,18 @@ int main()
 
     while (true) 
     {
-        std::string Image;
-        zmq::message_t message(sizeof(Image));
-        memcpy(message.data(), &image, sizeof(Image));
-        socket.send(message);
+        MSG message_img;
+        zmq::message_t message;
+        
+        if (ZH::Serialize(message_img, message))
+        {
+            socket.send(message);
+        }
+        else
+        {
+            std::cout << "[ERROR]" << std::endl;
+        }
+        
     }
 
     return 0;

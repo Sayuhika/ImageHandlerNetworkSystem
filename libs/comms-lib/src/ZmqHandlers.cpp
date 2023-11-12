@@ -1,25 +1,25 @@
 #include "ZmqHandlers.hpp"
+#include <bitsery/adapter/buffer.h>
 #include <string>
 
 namespace ZH
 {
-
-bool serialize_proto_msg(const google::protobuf::Message &msg, zmq::message_t& zmq_msg) 
+bool Serialize(const MSG &msg, zmq::message_t &zmq_msg)
 {
-    std::string serialized;
-    if (!msg.SerializeToString(&serialized)) 
-    {
-        return false;
-    }
-    zmq_msg.rebuild(serialized.size());
-    memcpy(zmq_msg.data(), serialized.data(), serialized.size());
+    std::string buffer;
+    auto rSize = bitsery::quickSerialization<OutputAdapter>(buffer, msg);
+    zmq_msg = zmq::message_t(buffer);
+
+    return rSize == zmq_msg.size();
+}
+
+bool Deserialize(MSG &msg, const zmq::message_t &zmq_msg)
+{
+    std::string buffer(static_cast<const char*>(zmq_msg.data()), zmq_msg.size());
+    auto state = bitsery::quickDeserialization<InputAdapter>({buffer.begin(), buffer.size()}, msg);
     
-    return true;
+    return state.first == bitsery::ReaderError::NoError && state.second;
 }
 
-bool deserialize_proto_msg(google::protobuf::Message &msg, const zmq::message_t& zmq_msg) 
-{
-    return msg.ParseFromArray(zmq_msg.data(), zmq_msg.size());
-}
 
 } // namespace ZH
