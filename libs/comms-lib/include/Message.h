@@ -1,3 +1,5 @@
+#pragma once
+
 #include <bitsery/adapter/buffer.h>
 #include <bitsery/bitsery.h>
 #include <bitsery/brief_syntax.h>

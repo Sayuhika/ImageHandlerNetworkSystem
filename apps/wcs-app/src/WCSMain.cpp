@@ -2,7 +2,8 @@
 #include <vector>
 #include <string>
 #include <Message.h>
-#include <ZmqHandlers>
+#include <ZmqHandlers.hpp>
+#include <iostream>
 
 int main() 
 {
@@ -13,11 +14,11 @@ int main()
     while (true) 
     {
         MSG message_img;
-        zmq::message_t message;
+        zmq::message_t message_zmq;
         
-        if (ZH::Serialize(message_img, message))
+        if (ZH::Serialize(message_img, message_zmq))
         {
-            socket.send(message);
+            socket.send(message_zmq);
         }
         else
         {
