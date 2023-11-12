@@ -4,3 +4,6 @@
 [submodule "libs/cppzmq"]
 	path = libs/cppzmq
 	url = https://github.com/zeromq/cppzmq.git
+[submodule "libs/bitsery"]
+	path = libs/bitsery
+	url = https://github.com/fraillt/bitsery.git
