@@ -12,7 +12,7 @@ file(GLOB COMMS_LIB_SOURCE ${COMMS_LIB_SOURCE_DIR}/*.cpp)
 add_library(${PROJECT_NAME} ${COMMS_LIB_HEADERS} ${COMMS_LIB_SOURCE} )
 
 # Линковка с библиотекой protobuf
-target_link_libraries(${PROJECT_NAME} PUBLIC zeromq cppzmq)
+target_link_libraries(${PROJECT_NAME} cppzmq libzmq)
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 14)
 
@@ -20,6 +20,7 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 14)
 target_include_directories( ${PROJECT_NAME} PUBLIC ${BITSERY_INCLUDE_DIR})
 
 # Экспорт описания протокола
-target_include_directories( ${PROJECT_NAME} PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>)
+target_include_directories(${PROJECT_NAME} 
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>)
