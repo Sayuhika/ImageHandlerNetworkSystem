@@ -19,12 +19,12 @@ int main(int argc, char* argv[])
     zmq::socket_t socket(context, ZMQ_PULL);
     socket.bind("tcp://" + addr);
 
-    std::vector<MSG> messages;
+    std::vector<AoiMsg> messages;
 
     while (true) 
     {
         zmq::message_t zmq_msg;
-        MSG message_img;
+        AoiMsg message_img;
         socket.recv(zmq_msg, zmq::recv_flags::none);
 
         if (CH::Deserialize(message_img, zmq_msg))
@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
             /// TO DO BEGIN
 
             // parsing to mat from 3 uint RGB channels
-            // to do somthing with msg
+            // to do somthing with message_img
 
             /// TO DO END
         }

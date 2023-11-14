@@ -6,6 +6,8 @@
 #include <Message.h>
 #include <CommsHandlers.hpp>
 
+#include <opencv2/core.hpp>
+
 int main(int argc, char* argv[]) 
 {
     if (argc != 2) 
@@ -21,14 +23,14 @@ int main(int argc, char* argv[])
 
     while (true) 
     {
-        MSG message_img;
+        AoiMsg message_img;
         zmq::message_t message_zmq;
         
         /// TO DO BEGIN
 
         // Getting 1 image
         // parsing to 3 uint RGB channels from mat
-        // filling msg
+        // filling message_img
 
         /// TO DO END
 

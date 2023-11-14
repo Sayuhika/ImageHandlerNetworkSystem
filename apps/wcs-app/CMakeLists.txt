@@ -14,4 +14,4 @@ file(GLOB WCS_APP_SOURCE ${WCS_APP_SOURCE_DIR}/*.cpp)
 add_executable(${PROJECT_NAME} ${WCS_APP_HEADERS} ${WCS_APP_SOURCE})
 
 # Линковка с библиотекой protobuf
-target_link_libraries(${PROJECT_NAME} comms-lib)
+target_link_libraries(${PROJECT_NAME} comms-lib opencv-lib)

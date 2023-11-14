@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
     while (true) 
     {
         zmq::message_t zmq_msg;
-        MSG message_img;
+        AoiMsg message_img;
         wc_server.recv(zmq_msg, zmq::recv_flags::none);
         
         if (CH::Deserialize(message_img, zmq_msg))
@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
             // parsing to mat from 3 uint RGB channels
             // image handling
             // parsing to 3 uint RGB channels from mat
-            // filling msg
+            // filling message_img
 
             /// TO DO END
         }

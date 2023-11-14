@@ -6,7 +6,7 @@
 namespace CH
 {
 
-bool Serialize(const MSG &msg, zmq::message_t &zmq_msg);
-bool Deserialize(MSG &msg, const zmq::message_t &zmq_msg);
+bool Serialize(const AoiMsg &msg, zmq::message_t &zmq_msg);
+bool Deserialize(AoiMsg &msg, const zmq::message_t &zmq_msg);
 
 } // namespace CH

@@ -4,7 +4,7 @@
 
 namespace CH
 {
-bool Serialize(const MSG &msg, zmq::message_t &zmq_msg)
+bool Serialize(const AoiMsg &msg, zmq::message_t &zmq_msg)
 {
     std::string buffer;
     auto rSize = bitsery::quickSerialization<OutputAdapter>(buffer, msg);
@@ -13,7 +13,7 @@ bool Serialize(const MSG &msg, zmq::message_t &zmq_msg)
     return rSize == zmq_msg.size();
 }
 
-bool Deserialize(MSG &msg, const zmq::message_t &zmq_msg)
+bool Deserialize(AoiMsg &msg, const zmq::message_t &zmq_msg)
 {
     std::string buffer(static_cast<const char*>(zmq_msg.data()), zmq_msg.size());
     auto state = bitsery::quickDeserialization<InputAdapter>({buffer.begin(), buffer.size()}, msg);
