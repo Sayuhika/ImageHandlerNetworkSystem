@@ -1,8 +1,8 @@
-#include "ZmqHandlers.hpp"
+#include "CommsHandlers.hpp"
 #include <bitsery/adapter/buffer.h>
 #include <string>
 
-namespace ZH
+namespace CH
 {
 bool Serialize(const MSG &msg, zmq::message_t &zmq_msg)
 {
@@ -21,5 +21,4 @@ bool Deserialize(MSG &msg, const zmq::message_t &zmq_msg)
     return state.first == bitsery::ReaderError::NoError && state.second;
 }
 
-
-} // namespace ZH
+} // namespace CH

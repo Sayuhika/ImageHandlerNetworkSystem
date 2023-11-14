@@ -3,10 +3,10 @@
 #include <zmq.hpp>
 #include "Message.h"
 
-namespace ZH
+namespace CH
 {
 
 bool Serialize(const MSG &msg, zmq::message_t &zmq_msg);
 bool Deserialize(MSG &msg, const zmq::message_t &zmq_msg);
 
-} // namespace ZH
+} // namespace CH
