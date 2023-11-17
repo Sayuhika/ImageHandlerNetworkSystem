@@ -1,5 +1,5 @@
 # ImageHandlerNetworkSystem
-UNN study project with ZMQ and Protobuf
+UNN study project with ZMQ and Bitsery
 
 # APPs:
 1) **WebCamServer** (wcs-app)
