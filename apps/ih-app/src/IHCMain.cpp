@@ -4,9 +4,39 @@
 #include <zmq.hpp>
 #include <Message.h>
 #include <CommsHandlers.hpp>
+#include "imageFiltration.h"
+
+bool core(const CH::Image &img_in, CH::Image &img_out)
+{	
+	try
+	{
+		imageFilter(
+			img_out.color_channel_r, 
+			img_out.color_channel_g, 
+			img_out.color_channel_b, 
+			img_in.color_channel_r, 
+			img_in.color_channel_g, 
+			img_in.color_channel_b, 
+			img_in.width, 
+			img_in.height);
+	}
+	catch(const std::exception& ex)
+	{
+		std::cerr << ex.what() << std::endl;
+
+		return false;
+	}
+
+	img_out.width  = img_in.width;
+	img_out.height = img_in.height;
+
+    return true;
+}
 
 int main(int argc, char* argv[]) 
 {
+    /// ========== /// ========== /// Connection /// ========== /// ========== ///
+
     if (argc != 3) 
     {
         std::cerr << "Usage: " << argv[0] << " <server1_ip> <server2_ip> like <ip1:port1> <ip2:port2>" << std::endl;
@@ -16,42 +46,47 @@ int main(int argc, char* argv[])
     std::string server2Ip = argv[2];
 
     zmq::context_t context(1);
-
     zmq::socket_t wc_server(context, ZMQ_PULL);
-    wc_server.connect("tcp://" + server1Ip);
+	zmq::socket_t ic_server(context, ZMQ_PUSH);
 
-    zmq::socket_t ic_server(context, ZMQ_PUSH);
-    ic_server.bind("tcp://" + server2Ip);
+	wc_server.connect("tcp://" + server1Ip); // to Web Cam Server
+	ic_server.bind   ("tcp://" + server2Ip); // to Image Collector Server
+
+    /// ========== /// ========== /// Main core /// ========== /// ========== ///
 
     while (true) 
     {
         zmq::message_t zmq_msg;
-        AoiMsg message_img;
-        wc_server.recv(zmq_msg, zmq::recv_flags::none);
+        CH::AoiMsg message_img;
+
+        wc_server.recv(zmq_msg, zmq::recv_flags::none); // from Web Cam Server
         
         if (CH::Deserialize(message_img, zmq_msg))
         {
-            /// TO DO BEGIN
+			CH::Image img_orig = message_img.aoi[0]; // original
+			CH::Image img_prsd; // processed (in future)
 
-            // parsing to mat from 3 uint RGB channels
-            // image handling
-            // parsing to 3 uint RGB channels from mat
-            // filling message_img
+            if (core(img_orig, img_prsd))
+            {
+				message_img.aoi.push_back(img_prsd);
 
-            /// TO DO END
+                if (CH::Serialize(message_img, zmq_msg))
+                {
+                    ic_server.send(zmq_msg, zmq::send_flags::none); // to Image Collector Server
+                }
+                else
+                {
+                    std::cerr << "Serialize failed" << std::endl;
+                }
+            }
+            else
+            {
+                std::cerr << "Core failed" << std::endl;
+            }
         }
         else
         {
             std::cerr << "Deserialize failed" << std::endl;
-        }
-
-        if (CH::Serialize(message_img, zmq_msg))
-        {
-            ic_server.send(zmq_msg, zmq::send_flags::none);
-        }
-        else
-        {
-            std::cerr << "Serialize failed" << std::endl;
         }
     }
 

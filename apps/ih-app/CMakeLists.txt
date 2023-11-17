@@ -13,4 +13,4 @@ file(GLOB IH_APP_SOURCE ${IH_APP_SOURCE_DIR}/*.cpp)
 add_executable(${PROJECT_NAME} ${IH_APP_HEADERS} ${IH_APP_SOURCE})
 
 # Линковка с библиотекой protobuf
-target_link_libraries(${PROJECT_NAME} comms-lib)
+target_link_libraries(${PROJECT_NAME} comms-lib worker-lib)

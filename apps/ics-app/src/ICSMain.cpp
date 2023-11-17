@@ -19,12 +19,12 @@ int main(int argc, char* argv[])
     zmq::socket_t socket(context, ZMQ_PULL);
     socket.bind("tcp://" + addr);
 
-    std::vector<AoiMsg> messages;
+    std::vector<CH::AoiMsg> messages;
 
     while (true) 
     {
         zmq::message_t zmq_msg;
-        AoiMsg message_img;
+        CH::AoiMsg message_img;
         socket.recv(zmq_msg, zmq::recv_flags::none);
 
         if (CH::Deserialize(message_img, zmq_msg))

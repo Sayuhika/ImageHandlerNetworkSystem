@@ -9,13 +9,16 @@
 #include <string>
 #include <vector>
 
+namespace CH
+{
+
 using OutputAdapter = bitsery::OutputBufferAdapter<std::string>;
 using InputAdapter = bitsery::InputBufferAdapter<std::string>;
 
 struct Image 
 {
-  unsigned width;
-  unsigned height;
+  uint32_t width;
+  uint32_t height;
 
   std::vector<uint8_t> color_channel_r;
   std::vector<uint8_t> color_channel_g;
@@ -31,3 +34,5 @@ struct AoiMsg
   
   template <typename S> void serialize(S &s) { s(time, aoi); }
 };
+
+} // namespace CH
