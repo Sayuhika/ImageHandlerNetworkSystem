@@ -2,6 +2,8 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include <chrono>
+#include <thread>
 
 #include <zmq.hpp>
 #include <Message.h>
@@ -28,7 +30,8 @@ int main(int argc, char* argv[])
     std::vector<CH::AoiMsg> messages;
     cv::Mat orig, proc;
 
-    for (int i = 0;;i++)
+    int iter = 0;
+    while(true)
     {
         zmq::message_t zmq_msg;
         CH::AoiMsg message_img;
@@ -38,8 +41,7 @@ int main(int argc, char* argv[])
         {
             messages.push_back(message_img);
 
-            // TO DO BEGIN
-            if (i > 60)
+            if (iter >= 60) // Накапливаем 60 кадров (величина условная).
             {
                 std::sort(messages.begin(), messages.end(), compareByTime);
                 std::string time = messages[0].time;
@@ -49,11 +51,14 @@ int main(int argc, char* argv[])
                 
                 // Отображение картинки
                 cv::imshow(time, proc);
-                char c = cv::waitKey(33); // 33 мск оптимально для 30 кдаров в секунду
-                if (c == 's') // остановка цикла
+                std::this_thread::sleep_for(std::chrono::milliseconds(33)); // 33 мск оптимально для 30 кадров в секунду
+                if (cv::waitKey(1) == 27) // остановка цикла
                     break;
             }
-            /// TO DO END
+            else 
+            {
+                iter++;
+            }
         }
         else
         {
