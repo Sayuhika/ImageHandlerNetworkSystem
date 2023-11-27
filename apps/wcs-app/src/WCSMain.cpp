@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <chrono>
+#include <ctime>
 #include <opencv2/opencv.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -29,7 +30,11 @@ bool core(cv::VideoCapture &inputVideo, CH::AoiMsg &message_img)
     message_img.aoi.push_back(img_orig);
 
     // adding time
-    message_img.time = std::time(nullptr);
+    std::time_t now = std::time(NULL);
+    std::tm * ptm = std::localtime(&now);
+    char buffer[32];
+    std::strftime(buffer, 32, "%a, %d.%m.%Y %H:%M:%S", ptm);
+    message_img.time = std::string(buffer);
 
     return true;
 }

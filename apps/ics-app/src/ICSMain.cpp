@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
                 messages.erase(messages.cbegin(), messages.cbegin() + 1);
                 
                 // Отображение картинки
-                cv::imshow(time, proc);
+                // cv::imshow(time, proc); // TO DP LINK OPENCV LIB
                 std::this_thread::sleep_for(std::chrono::milliseconds(33)); // 33 мск оптимально для 30 кадров в секунду
                 if (cv::waitKey(1) == 27) // остановка цикла
                     break;
