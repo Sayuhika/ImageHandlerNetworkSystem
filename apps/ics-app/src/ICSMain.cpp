@@ -1,10 +1,18 @@
 #include <iostream>
+#include <sstream>
 #include <vector>
-#include <iostream>
+#include <algorithm>
+#include <chrono>
+#include <thread>
 
 #include <zmq.hpp>
 #include <Message.h>
 #include <CommsHandlers.hpp>
+
+bool compareByTime(const CH::AoiMsg& a, const CH::AoiMsg& b)
+{
+    return std::stoi(a.time) < std::stoi(b.time);
+}
 
 int main(int argc, char* argv[]) 
 {
@@ -20,8 +28,10 @@ int main(int argc, char* argv[])
     socket.bind("tcp://" + addr);
 
     std::vector<CH::AoiMsg> messages;
+    cv::Mat orig, proc;
 
-    while (true) 
+    int iter = 0;
+    while(true)
     {
         zmq::message_t zmq_msg;
         CH::AoiMsg message_img;
@@ -31,12 +41,24 @@ int main(int argc, char* argv[])
         {
             messages.push_back(message_img);
 
-            /// TO DO BEGIN
-
-            // parsing to mat from 3 uint RGB channels
-            // to do somthing with message_img
-
-            /// TO DO END
+            if (iter >= 60) // Накапливаем 60 кадров (величина условная).
+            {
+                std::sort(messages.begin(), messages.end(), compareByTime);
+                std::string time = messages[0].time;
+                orig = CH::ImageToMat(messages[0].aoi[0]); // получение оригинала
+                proc = CH::ImageToMat(messages[0].aoi[1]); // получение обработанной картинки
+                messages.erase(messages.cbegin(), messages.cbegin() + 1);
+                
+                // Отображение картинки
+                cv::imshow(time, proc);
+                std::this_thread::sleep_for(std::chrono::milliseconds(33)); // 33 мск оптимально для 30 кадров в секунду
+                if (cv::waitKey(1) == 27) // остановка цикла
+                    break;
+            }
+            else 
+            {
+                iter++;
+            }
         }
         else
         {
