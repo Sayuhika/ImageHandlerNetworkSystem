@@ -14,7 +14,7 @@
 extern const int &FRAME_WIDTH;
 extern const int &FRAME_HEIGHT;
 
-bool core(cv::VideoCapture &inputVideo, CH::AoiMsg &message_img)
+bool core(cv::VideoCapture &inputVideo, CH::AoiMsg &message_img, int a)
 {   
     cv::Mat mat;
     inputVideo >> mat;
@@ -33,8 +33,12 @@ bool core(cv::VideoCapture &inputVideo, CH::AoiMsg &message_img)
     std::time_t now = std::time(NULL);
     std::tm * ptm = std::localtime(&now);
     char buffer[32];
-    std::strftime(buffer, 32, "%a, %d.%m.%Y %H:%M:%S", ptm);
-    message_img.time = std::string(buffer);
+    std::strftime(buffer, 32, "%a, %d.%m.%Y %H:%M:%S.000", ptm);
+
+    // message_img.time = std::string(buffer);
+    message_img.time = std::to_string(a);
+
+    std::cout << message_img.time << std::endl;
 
     return true;
 }
@@ -72,16 +76,20 @@ int main(int argc, char* argv[])
 
     /// ========== /// ========== /// Main core /// ========== /// ========== ///
 
+    int a = 0;
+
     while (true) 
     {
         CH::AoiMsg message_img;
         zmq::message_t message_zmq;
+        // std::this_thread::sleep_for(std::chrono::milliseconds(300));
 
-        if (core(inputVideo, message_img))
+        if (core(inputVideo, message_img, a))
         {
             if (CH::Serialize(message_img, message_zmq))
             {
                 socket.send(message_zmq);
+                a++;
             }
             else
             {

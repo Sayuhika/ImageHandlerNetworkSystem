@@ -6,6 +6,8 @@ project(wcs-app LANGUAGES C CXX)
 
 set(WCS_APP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(WCS_APP_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(OpenCV_DIR C:/OpenCV-4.8.0/opencv/build)
+find_package(OpenCV REQUIRED)
 
 file(GLOB WCS_APP_HEADERS ${WCS_APP_INCLUDE_DIR}/*.hpp)
 file(GLOB WCS_APP_SOURCE ${WCS_APP_SOURCE_DIR}/*.cpp)
@@ -14,4 +16,4 @@ file(GLOB WCS_APP_SOURCE ${WCS_APP_SOURCE_DIR}/*.cpp)
 add_executable(${PROJECT_NAME} ${WCS_APP_HEADERS} ${WCS_APP_SOURCE})
 
 # Линковка с библиотекой protobuf
-target_link_libraries(${PROJECT_NAME} comms-lib opencv-lib)
+target_link_libraries(${PROJECT_NAME} comms-lib opencv-lib ${OpenCV_LIBS})

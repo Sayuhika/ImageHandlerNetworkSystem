@@ -1,5 +1,7 @@
 #include <string>
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 #include <zmq.hpp>
 #include <Message.h>
@@ -17,8 +19,8 @@ bool core(const CH::Image &img_in, CH::Image &img_out)
 			img_in.color_channel_r, 
 			img_in.color_channel_g, 
 			img_in.color_channel_b, 
-			img_in.width, 
-			img_in.height);
+			img_in.height, 
+			img_in.width);
 	}
 	catch(const std::exception& ex)
 	{
@@ -29,6 +31,8 @@ bool core(const CH::Image &img_in, CH::Image &img_out)
 
 	img_out.width  = img_in.width;
 	img_out.height = img_in.height;
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
     return true;
 }
@@ -48,9 +52,12 @@ int main(int argc, char* argv[])
     zmq::context_t context(1);
     zmq::socket_t wc_server(context, ZMQ_PULL);
 	zmq::socket_t ic_server(context, ZMQ_PUSH);
+    
+    wc_server.setsockopt(ZMQ_CONFLATE, 1);
+    ic_server.setsockopt(ZMQ_CONFLATE, 1);
 
 	wc_server.connect("tcp://" + server1Ip); // to Web Cam Server
-	ic_server.bind   ("tcp://" + server2Ip); // to Image Collector Server
+	ic_server.connect("tcp://" + server2Ip); // to Image Collector Server
 
     /// ========== /// ========== /// Main core /// ========== /// ========== ///
 
@@ -63,6 +70,7 @@ int main(int argc, char* argv[])
         
         if (CH::Deserialize(message_img, zmq_msg))
         {
+            std::cout << message_img.time << std::endl;
 			CH::Image img_orig = message_img.aoi[0]; // original
 			CH::Image img_prsd; // processed (in future)
 
