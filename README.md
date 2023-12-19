@@ -12,3 +12,7 @@ UNN study project with ZMQ and Bitsery
 # After clone:
 Открыть терминал в корне проекта и выполнить следующие команды:
 * **git submodule update --init --recursive**
+
+# Current opencv-lib problem:
+Поскольку с проектной opencv-lib есть проблемы, для работы проекта необходимы некоторые манипуляции по гайду:
+* https://www.youtube.com/watch?v=aMXQshF7zdo
