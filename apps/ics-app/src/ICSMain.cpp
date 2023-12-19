@@ -30,7 +30,8 @@ int main(int argc, char* argv[])
     std::vector<CH::AoiMsg> messages;
     cv::Mat orig, proc;
 
-    int iter = 0;
+    int last_frame_index = 0;
+
     while(true)
     {
         zmq::message_t zmq_msg;
@@ -39,26 +40,20 @@ int main(int argc, char* argv[])
 
         if (CH::Deserialize(message_img, zmq_msg))
         {
-            messages.push_back(message_img);
+            int index = std::stoi(message_img.time);
+            if (index < last_frame_index) 
+            {
+                continue;
+            }
+            last_frame_index = index;
 
-            if (iter >= 60) // Накапливаем 60 кадров (величина условная).
+            std::cout << message_img.time << std::endl;
+            orig = CH::ImageToMat(message_img.aoi[1]);
+            cv::imshow("Result", orig);
+            if (cv::waitKey(1) == 27) 
             {
-                std::sort(messages.begin(), messages.end(), compareByTime);
-                std::string time = messages[0].time;
-                orig = CH::ImageToMat(messages[0].aoi[0]); // получение оригинала
-                proc = CH::ImageToMat(messages[0].aoi[1]); // получение обработанной картинки
-                messages.erase(messages.cbegin(), messages.cbegin() + 1);
-                
-                // Отображение картинки
-                // cv::imshow(time, proc); // TO DP LINK OPENCV LIB
-                std::this_thread::sleep_for(std::chrono::milliseconds(33)); // 33 мск оптимально для 30 кадров в секунду
-                if (cv::waitKey(1) == 27) // остановка цикла
-                    break;
-            }
-            else 
-            {
-                iter++;
-            }
+                break;
+            } 
         }
         else
         {

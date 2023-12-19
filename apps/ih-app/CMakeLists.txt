@@ -5,6 +5,8 @@ project(ih-app LANGUAGES C CXX)
 
 set(IH_APP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(IH_APP_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(OpenCV_DIR C:/OpenCV-4.8.0/opencv/build)
+find_package(OpenCV REQUIRED)
 
 file(GLOB IH_APP_HEADERS ${IH_APP_INCLUDE_DIR}/*.hpp)
 file(GLOB IH_APP_SOURCE ${IH_APP_SOURCE_DIR}/*.cpp)
@@ -13,4 +15,4 @@ file(GLOB IH_APP_SOURCE ${IH_APP_SOURCE_DIR}/*.cpp)
 add_executable(${PROJECT_NAME} ${IH_APP_HEADERS} ${IH_APP_SOURCE})
 
 # Линковка с библиотекой protobuf
-target_link_libraries(${PROJECT_NAME} comms-lib worker-lib)
+target_link_libraries(${PROJECT_NAME} comms-lib worker-lib ${OpenCV_LIBS})
